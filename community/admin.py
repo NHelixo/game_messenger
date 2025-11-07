@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import CommunityRole, UserCommunity, CommunityMember, CommunityPost, CommunityPoll, PollAnswer, UserPollAnswer
+
+admin.site.register([CommunityRole, UserCommunity, CommunityMember, CommunityPost, CommunityPoll, PollAnswer, UserPollAnswer])
