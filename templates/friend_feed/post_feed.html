@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Головна{% endblock %}
+
+{% block content %}
+   
+    {% if posts %}
+        {% for post in posts %}
+            <h2> {{post.user}} </h2>
+            <h3> {{post.text}} </h3>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto;">
+            {% endif %}
+            {% if post.video %}
+                <video controls>
+                    <source src="{{ post.video.url }}" type="video/mp4">
+                    Ваш браузер не підтримує відео.
+                </video>
+            {% endif %}
+            <form method="post" action="{% url 'friend_feed:toggle_like' post.id %}">
+                {% csrf_token %}
+                <button type="submit">
+                    👍 {{ post.like_count }}
+                </button>
+            </form>
+            <form method="post" action="{% url 'friend_feed:add_comment' post.id %}">
+                {% csrf_token %}
+                <textarea name="comment_text"></textarea>
+                <button type="submit"> Додати коментар </button>
+            </form>
+            <h4> {{post.create_time}} </h4>
+        {% endfor %}
+    {% else %}
+        <h2> Немає постів! </h2>
+    {% endif %}
+{% endblock %}

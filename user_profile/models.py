@@ -21,4 +21,3 @@ class ChatMessage(models.Model):
     create_time = models.DateTimeField(auto_now=True)
     is_read = models.BooleanField(default=False)
     edited = models.BooleanField(default=False)
-

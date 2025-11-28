@@ -7,8 +7,8 @@
 </head>
 <body>
 
-    <a href=""> Головна </a>
-    <a href=""> Профіль </a>
+    <a href="{% url 'friend_feed:post_feed' %}"> Головна </a>
+    <a href="{% url 'user_profile:profile' pk=user.id %}"> Профіль </a>
     <a href=""> Друзі </a>
     <a href=""> Спільноти </a>
 
@@ -18,6 +18,12 @@
         <a href=""> Логін </a>
         <a href=""> Реєстрація </a>
     {% endif %}
+
+    <main>
+        {% block content %}
+
+        {% endblock %}
+    </main>
     
 </body>
 </html>

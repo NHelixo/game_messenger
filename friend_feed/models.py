@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class FriendPost(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     text = models.TextField()
     create_time = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='image/', null=True, blank=True)

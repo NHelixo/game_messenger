@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Профіль{% endblock %}
+
+{% block content %}
+
+<h1> Ваш профіль </h1>
+
+<h1> {{ users.first_name }} </h1>
+<h2> {{ users.last_name }} </h2>
+    
+{% endblock %}
