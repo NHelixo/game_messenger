@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.PostFeed.as_view(), name='post_feed'),
     path('toggle_like/<int:post_id>/', views.ToggleLikeView.as_view(), name='toggle_like'),
     path('add_comment/<int:post_id>/', views.AddComment.as_view(), name='add_comment'),
+    path('search_friend/', views.SearchFriend.as_view(), name='search_friend'),
+    path('search_community/', views.SearchCommunity.as_view(), name='search_community'),
 ]
 
 if settings.DEBUG:

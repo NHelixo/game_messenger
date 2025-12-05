@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Пошук Спільноти:</h1>
+
+    <form method="get">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="text" name="q" value="{{ query }}">
+        <button type="submit"> Пошук </button>
+    </form>
+
+    {% if community_list %}
+        {% for community in community_list %}
+            <h2> {{community.name}} </h2>
+            <h3> {{community.description}} </h3>
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit"> Приєднатися до спільноти </button>
+            </form>
+        {% endfor %}
+    {% else %}
+        <h2> Спільнот не знайдено! </h2>
+    {% endif %}
+
+{% endblock %}

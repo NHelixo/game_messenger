@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Пошук друзів:</h1>
+
+    <form method="get">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="text" name="q" value="{{ query }}">
+        <button type="submit"> Пошук </button>
+    </form>
+
+    {% if friends %}
+        {% for friend in friends %}
+            <h2> {{friend.first_name}} </h2>
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit"> Запит на дружбу </button>
+            </form>
+        {% endfor %}
+    {% else %}
+        <h2> Користувачів не знайдено! </h2>
+    {% endif %}
+
+{% endblock %}

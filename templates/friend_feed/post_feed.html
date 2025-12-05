@@ -3,6 +3,9 @@
 {% block title %}Головна{% endblock %}
 
 {% block content %}
+
+    <a href="{% url 'friend_feed:search_friend' %}"> Знайти друга </a>
+    <a href="{% url 'friend_feed:search_community' %}"> Знайти спільноту </a>
    
     {% if posts %}
         {% for post in posts %}
@@ -31,6 +34,10 @@
             <h4> {{post.create_time}} </h4>
         {% endfor %}
     {% else %}
-        <h2> Немає постів! </h2>
+        {% if user.is_authenticated %}
+            <h2> Немає постів! </h2>
+        {% else %}
+            <h2> Увійдіть або зареєструйтесь щоб побачити контент своїх друзів! </h2>
+        {% endif %}
     {% endif %}
 {% endblock %}

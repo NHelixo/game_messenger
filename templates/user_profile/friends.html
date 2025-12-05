@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Ваші друзі:</h1>
+
+    {% if friends_users %}
+        {% for friend in friends_users %}
+            <h2> {{friend.first_name}} </h2>
+        {% endfor %}
+    {% else %}
+        <h2> У вас поки що немає друзів </h2>
+    {% endif %}
+
+{% endblock %}

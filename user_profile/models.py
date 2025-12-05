@@ -21,3 +21,11 @@ class ChatMessage(models.Model):
     create_time = models.DateTimeField(auto_now=True)
     is_read = models.BooleanField(default=False)
     edited = models.BooleanField(default=False)
+
+
+class UserPicture(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default.jpg', null=True, blank=True)
+
+    def __str__(self):
+        return f"Profile of {self.user.username}"
