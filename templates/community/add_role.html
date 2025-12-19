@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form action="" method="post">
+        <h3> Назва ролі: </h3>
+        <input type="text" name="name">
+        
+        <h3> Додавання постів: </h3>
+        <input type="checkbox" name="adding_post_permission">
+
+        <h3> Коментування постів: </h3>
+        <input type="checkbox" name="comment_post_permission">
+
+        <h3> Додавання фото: </h3>
+        <input type="checkbox" name="adding_image_permission">
+
+        <h3> Додавання відео: </h3>
+        <input type="checkbox" name="adding_video_permission">
+
+        <h3> Додавання голосувань: </h3>
+        <input type="checkbox" name="adding_vote_permission">
+
+        <h3> Можливість голосування: </h3>
+        <input type="checkbox" name="adding_answer_vote_permission">
+
+        <h3> Можливіть банити користувачів: </h3>
+        <input type="checkbox" name="user_ban_permission">
+
+        <h3> Можливість заглушати користувачів: </h3>
+        <input type="checkbox" name="user_mute_permission">
+
+        <h3> Можливіть видаляти пости: </h3>
+        <input type="checkbox" name="delete_user_post_permission">
+
+        <h3> Права адміністратора: </h3>
+        <input type="checkbox" name="admin_permission">
+
+
+        <button type="submit"> Створити роль </button>
+    </form>
+
+{% endblock %}

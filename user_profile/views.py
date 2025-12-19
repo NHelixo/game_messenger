@@ -9,6 +9,7 @@ from .forms import ProfileEditForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from user_profile.models import UserFriend
+from community.models import UserCommunity, CommunityMember
 
 class Profile(DetailView):
     model = User
@@ -45,7 +46,9 @@ class ProfileEdit(LoginRequiredMixin, UpdateView):
 
         form.save()
 
-        return redirect('core:login')
+        user = self.request.user
+
+        return redirect('user_profile:profile', pk=user.id)
     
 
 class FriendList(ListView):
@@ -66,14 +69,57 @@ class FriendList(ListView):
 
         friends_users = User.objects.filter(id__in=friends)
 
-        print(f"Знайдено користувачів: {friends_users.count()}")
-
         return friends_users
 
 
 class AcceptFriend(View):
-    pass
+    def post(self, request, pk):
+        user = request.user
+        friend = get_object_or_404(User, id=pk)
+
+        friendship = UserFriend.get_friendship(user, friend)
+
+        if friendship:
+            if friendship.status == "pending":
+                friendship.status = "accepted"
+                friendship.save()
+                return redirect("user_profile:profile", pk=user.id)
+            else:
+                print("Щось пішло не так")
+                return redirect("user_profile:profile", pk=user.id)
+        else:
+            print("Відносини між користувачами не знайдено.")
+            return redirect("user_profile:profile", pk=user.id)
+
 
 
 class RejectFriend(View):
-    pass
+    def post(self, request, pk):
+        user = request.user
+        friend = get_object_or_404(User, id=pk)
+
+        friendship = UserFriend.get_friendship(user, friend)
+
+        print(friendship.status)
+
+        if friendship and friendship.status == "pending":
+            friendship.delete()
+            return redirect("user_profile:profile", pk=user.id)
+        
+        elif friendship and friendship.status == "accepted" or friendship and friendship.status == "blocked":
+            friendship.delete()
+            return redirect("user_profile:friends", pk=user.id)
+
+        else:
+            print("Відносини між користувачами не знайдено.")
+            return redirect("user_profile:profile", pk=user.id)
+
+
+class Communities(ListView):
+    model = UserCommunity
+    template_name = "user_profile/communities.html"
+    context_object_name = "communities"
+
+    def get_queryset(self):
+        user = self.request.user
+        return UserCommunity.objects.filter(communitymember__user=user)

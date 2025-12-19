@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class UserCommunity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+    community_picture = models.ImageField(upload_to='community_picture/', null=True, blank=True)
     description = models.TextField()
     create_time = models.DateTimeField(auto_now=True)
 

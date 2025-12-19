@@ -9,6 +9,15 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'password1', 'password2')
 
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        
+        # Додаємо класи до полів
+        for field in self.fields.values():
+            field.widget.attrs.update({
+                'class': 'mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+            })
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.first_name = self.cleaned_data['first_name']

@@ -3,12 +3,21 @@
 {% block title %}Реєстрація{% endblock %}
 
 {% block content %}
-   
+  <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg mt-12">
+    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-6">Реєстрація</h1>
+
+    <!-- Форма реєстрації -->
     <form method="post">
       {% csrf_token %}
+      
+      <!-- Виведення форми з усіма полями, стилізованими за допомогою widget.attrs -->
       {{ form.as_p }}
-      <button type="submit">Зареєструватися</button>
-    </form>
-    <p>Вже зареєстровані? <a href="{% url 'core:login' %}">Увійдіть</a></p>
 
+      <!-- Кнопка зареєструватися -->
+      <button type="submit" class="w-full py-3 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none transition-colors">Зареєструватися</button>
+    </form>
+
+    <!-- Посилання на логін -->
+    <p class="text-center mt-4 text-gray-600">Вже зареєстровані? <a href="{% url 'core:login' %}" class="text-blue-500 hover:underline">Увійдіть</a></p>
+  </div>
 {% endblock %}

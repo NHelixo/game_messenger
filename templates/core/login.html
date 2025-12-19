@@ -3,12 +3,30 @@
 {% block title %}Логін{% endblock %}
 
 {% block content %}
-   
+  <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg mt-12">
+    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-6">Увійти</h1>
+
+    <!-- Форма логіну -->
     <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Увійти</button>
-    </form>
-    <p>Ще не зареєстровані? <a href="{% url 'core:register' %}">Зареєструйтеся</a></p>
+      
+      <!-- Поле для вводу логіну -->
+      <div class="mb-4">
+        <label for="username" class="block text-sm font-medium text-gray-700">Логін</label>
+        <input type="text" name="username" id="username" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
 
+      <!-- Поле для вводу пароля -->
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700">Пароль</label>
+        <input type="password" name="password" id="password" class="mt-1 p-3 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Кнопка увійти -->
+      <button type="submit" class="w-full py-3 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none transition-colors">Увійти</button>
+    </form>
+
+    <!-- Посилання на реєстрацію -->
+    <p class="text-center mt-4 text-gray-600">Ще не зареєстровані? <a href="{% url 'core:register' %}" class="text-blue-500 hover:underline">Зареєструйтеся</a></p>
+  </div>
 {% endblock %}

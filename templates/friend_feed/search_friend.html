@@ -1,27 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-semibold text-gray-800 mb-6">Пошук друзів:</h1>
 
-    <h1>Пошук друзів:</h1>
-
-    <form method="get">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="text" name="q" value="{{ query }}">
-        <button type="submit"> Пошук </button>
+    <!-- Форма пошуку -->
+    <form method="get" class="mb-6 flex items-center space-x-4">
+      {% csrf_token %}
+      <div class="flex items-center space-x-2">
+        <input type="text" name="q" value="{{ query }}" placeholder="Пошук за іменем..." class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="px-6 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none transition-colors">Пошук</button>
+      </div>
     </form>
 
+    <!-- Результати пошуку -->
     {% if friends %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for friend in friends %}
-            <h2> {{friend.first_name}} </h2>
-            <form method="post" action="">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit"> Запит на дружбу </button>
-            </form>
-        {% endfor %}
-    {% else %}
-        <h2> Користувачів не знайдено! </h2>
-    {% endif %}
+          <div class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
+            <!-- Фото профілю -->
+            <div class="w-32 h-32 overflow-hidden rounded-full border-4 border-blue-500 mb-4">
+              <img src="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture.url }}{% else %}/media/profile_pictures/default.jpg{% endif %}" alt="Profile Picture" class="w-full h-full object-cover">
+            </div>
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">{{ friend.first_name }}</h2>
 
+            <!-- Запит на дружбу -->
+            <form method="post" action="{% url 'friend_feed:friend_request' friend=friend.id %}" class="w-full mt-4">
+              {% csrf_token %}
+              <button type="submit" class="w-full px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 focus:outline-none transition-colors">Запит на дружбу</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <h2 class="text-xl text-gray-600">Користувачів не знайдено!</h2>
+    {% endif %}
+  </div>
 {% endblock %}

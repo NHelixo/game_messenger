@@ -12,6 +12,13 @@ class UserFriend(models.Model):
     friend = models.ForeignKey(User, related_name='friend',on_delete=models.CASCADE)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='pending')
 
+    @classmethod
+    def get_friendship(cls, user1, user2):
+        return cls.objects.filter(
+            (models.Q(user=user1) & models.Q(friend=user2)) |
+            (models.Q(user=user2) & models.Q(friend=user1))
+        ).first()
+
 
 class ChatMessage(models.Model):
     user = models.ForeignKey(User, related_name='r_user', on_delete=models.CASCADE)

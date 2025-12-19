@@ -11,6 +11,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.urls import reverse
+from django.shortcuts import render, redirect
+from django.db.models import Q
 
 
 class PostFeed(ListView):
@@ -62,7 +64,7 @@ class AddComment(View):
         PostComment.objects.create(post=post, user=user, text=comment)
 
         return HttpResponseRedirect(reverse('friend_feed:post_feed'))
-    
+
 
 class SearchFriend(ListView):
     model = User
@@ -70,13 +72,20 @@ class SearchFriend(ListView):
     context_object_name = "friends"
 
     def get_queryset(self):
+        user = self.request.user
+
         query = self.request.GET.get('q', '')
-        queryset = User.objects.all()
+
+        friends = UserFriend.objects.filter(user=user).values_list('friend', flat=True)
+        friends_of_user = UserFriend.objects.filter(friend=user).values_list('user', flat=True)
+        friends = list(friends) + list(friends_of_user)
+
+        all_users = User.objects.exclude(id=user.id).exclude(id__in=friends)
 
         if query:
-            queryset = queryset.filter(first_name__icontains=query)
-        
-        return queryset
+            all_users = all_users.filter(username__icontains=query)
+
+        return all_users
 
 
 class SearchCommunity(ListView):
@@ -92,3 +101,13 @@ class SearchCommunity(ListView):
             queryset = queryset.filter(name__icontains=query) | queryset.filter(description__icontains=query)
         
         return queryset
+    
+
+class FriendRequest(View):
+    def post(self, request, friend):
+        user = request.user
+        friend = get_object_or_404(User, id=friend)
+
+        friend_request = UserFriend(user=user, friend=friend)
+        friend_request.save()
+        return redirect("friend_feed:search_friend")

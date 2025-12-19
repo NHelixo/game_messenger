@@ -11,6 +11,7 @@ urlpatterns = [
     path('add_comment/<int:post_id>/', views.AddComment.as_view(), name='add_comment'),
     path('search_friend/', views.SearchFriend.as_view(), name='search_friend'),
     path('search_community/', views.SearchCommunity.as_view(), name='search_community'),
+    path('friend_request/<int:friend>', views.FriendRequest.as_view(), name='friend_request'),
 ]
 
 if settings.DEBUG:

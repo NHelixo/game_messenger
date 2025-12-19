@@ -3,41 +3,73 @@
 {% block title %}Головна{% endblock %}
 
 {% block content %}
+    <div class="max-w-4xl mx-auto p-4">
 
-    <a href="{% url 'friend_feed:search_friend' %}"> Знайти друга </a>
-    <a href="{% url 'friend_feed:search_community' %}"> Знайти спільноту </a>
-   
-    {% if posts %}
-        {% for post in posts %}
-            <h2> {{post.user}} </h2>
-            <h3> {{post.text}} </h3>
-            {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto;">
-            {% endif %}
-            {% if post.video %}
-                <video controls>
-                    <source src="{{ post.video.url }}" type="video/mp4">
-                    Ваш браузер не підтримує відео.
-                </video>
-            {% endif %}
-            <form method="post" action="{% url 'friend_feed:toggle_like' post.id %}">
-                {% csrf_token %}
-                <button type="submit">
-                    👍 {{ post.like_count }}
-                </button>
-            </form>
-            <form method="post" action="{% url 'friend_feed:add_comment' post.id %}">
-                {% csrf_token %}
-                <textarea name="comment_text"></textarea>
-                <button type="submit"> Додати коментар </button>
-            </form>
-            <h4> {{post.create_time}} </h4>
-        {% endfor %}
-    {% else %}
-        {% if user.is_authenticated %}
-            <h2> Немає постів! </h2>
+        <!-- Посилання на пошук -->
+        <div class="flex justify-between mb-6">
+            <a href="{% url 'friend_feed:search_friend' %}" class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-colors">Знайти друга</a>
+            <a href="{% url 'friend_feed:search_community' %}" class="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 transition-colors">Знайти спільноту</a>
+        </div>
+
+        <!-- Пости -->
+        {% if posts %}
+            {% for post in posts %}
+                <div class="bg-white rounded-lg shadow-md mb-6 p-4 flex gap-4">
+                    <!-- Зображення профілю -->
+                    <div class="w-28 h-28 overflow-hidden rounded-full border-2 border-gray-300">
+                        <img src="{% if post.profile.profile_picture %}{{ post.profile.profile_picture.url }}{% else %}/media/profile_pictures/default.jpg{% endif %}" alt="Profile Picture" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="flex-1">
+                        <h2 class="text-xl font-semibold text-gray-800">{{ post.user }}</h2>
+                        <p class="text-gray-600 mt-2">{{ post.text }}</p>
+
+                        <div class="flex gap-4 mt-4">
+                            <!-- Зображення посту (ліворуч) -->
+                            {% if post.image %}
+                                <div class="flex-1">
+                                    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="max-w-full h-auto rounded-lg shadow-sm">
+                                </div>
+                            {% endif %}
+
+                            <!-- Відео (праворуч) -->
+                            {% if post.video %}
+                                <div class="flex-1">
+                                    <video controls class="max-w-full h-auto rounded-lg shadow-sm">
+                                        <source src="{{ post.video.url }}" type="video/mp4">
+                                        Ваш браузер не підтримує відео.
+                                    </video>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Лайки та коментарі -->
+                        <div class="mt-4 flex items-center gap-6">
+                            <form method="post" action="{% url 'friend_feed:toggle_like' post.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="px-4 py-2 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">👍 {{ post.like_count }}</button>
+                            </form>
+
+                            <form method="post" action="{% url 'friend_feed:add_comment' post.id %}" class="flex-1">
+                                {% csrf_token %}
+                                <textarea name="comment_text" placeholder="Ваш коментар..." class="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                                <button type="submit" class="mt-2 w-full py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition-colors">Додати коментар</button>
+                            </form>
+                        </div>
+
+                        <!-- Час публікації -->
+                        <p class="text-xs text-gray-500 mt-2">{{ post.create_time }}</p>
+                    </div>
+                </div>
+            {% endfor %}
         {% else %}
-            <h2> Увійдіть або зареєструйтесь щоб побачити контент своїх друзів! </h2>
+            <div class="text-center">
+                {% if user.is_authenticated %}
+                    <h2 class="text-xl text-gray-700">Немає постів!</h2>
+                {% else %}
+                    <h2 class="text-xl text-gray-700">Увійдіть або зареєструйтесь, щоб побачити контент своїх друзів!</h2>
+                {% endif %}
+            </div>
         {% endif %}
-    {% endif %}
+    </div>
 {% endblock %}

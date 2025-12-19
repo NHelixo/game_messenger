@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2> {{community.name}} </h2>
+        <img src="{% if community.community_picture %}{{ community.community_picture.url }}{% else %}/media/profile_pictures/default.jpg{% endif %}" alt="Community Picture" class="w-full h-full object-cover">
+    <h4> {{community.description}} </h4>
+    <a href="{% url 'community:add_role' id=community.id %}"> Додати роль </a>
+
+{% endblock %}

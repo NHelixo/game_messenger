@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import UserPicture
+import os
 
 class ProfileEditForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True, label="Нікнейм")
@@ -15,9 +16,12 @@ class ProfileEditForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-
         profile_picture = self.cleaned_data.get('profile_picture')
         if profile_picture:
+            old_picture = UserPicture.objects.get(pk=self.instance.profile.id)
+            if old_picture:
+                if os.path.isfile(old_picture.profile_picture.path):
+                    os.remove(old_picture.profile_picture.path)
             user_picture, created = UserPicture.objects.get_or_create(user=user)
 
             extension = profile_picture.name.split('.')[-1]
