@@ -63,3 +63,16 @@ class UserPollAnswer(models.Model):
 
     class Meta:
         unique_together = ('user', 'pollanswer')
+
+
+class CommunityChat(models.Model):
+    community = models.ForeignKey(UserCommunity, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+
+
+class ChatMessage(models.Model):
+    chat = models.ForeignKey(CommunityChat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    add_time = models.DateTimeField(auto_now=True)

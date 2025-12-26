@@ -17,9 +17,9 @@ class Community(DetailView):
     context_object_name = "community"
 
     def get_object(self, queryset=None):
-        # Отримуємо id з URL-шляхів через self.kwargs
+
         community_id = self.kwargs.get('id')
-        # Повертаємо об'єкт або 404, якщо не знайдено
+
         return get_object_or_404(UserCommunity, id=community_id)
 
 class AddRole(View):
@@ -27,5 +27,11 @@ class AddRole(View):
     template_name = "community/add_role.html"
     context_object_name = "role"
 
-    def post(self, id):
-        pass
+    def get(self, request, id):
+        community = get_object_or_404(UserCommunity, id=id)
+        return render(request, self.template_name, {'community': community})
+
+    def post(self, request, id):
+        community = get_object_or_404(UserCommunity, id=id)
+
+        return redirect('community:community', id=id)

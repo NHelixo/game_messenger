@@ -1,22 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-6">Редагування профілю</h2>
 
-  <h2>Редагування профілю</h2>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+      
+      <!-- Відображення форми -->
+      <div class="grid grid-cols-1 gap-6">
+        {% for field in form %}
+          <div class="space-y-2">
+            <label for="{{ field.id_for_label }}" class="block text-lg font-medium text-gray-700">{{ field.label }}</label>
+            <div class="relative">
+              {{ field }}
+              {% if field.errors %}
+                <p class="text-sm text-red-500 mt-1">{{ field.errors }}</p>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+      <!-- Кнопка відправки -->
+      <div>
+        <button type="submit" class="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">
+          Оновити профіль
+        </button>
+      </div>
+    </form>
 
-    <button type="submit">Оновити профіль</button>
-  </form>
-
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
+    {% if messages %}
+      <div class="mt-6">
+        <ul class="space-y-2">
+          {% for message in messages %}
+            <li class="bg-yellow-100 text-yellow-800 p-3 rounded-md shadow-sm">
+              {{ message }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

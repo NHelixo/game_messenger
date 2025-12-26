@@ -1,43 +1,84 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Створення ролі</h2>
 
-    <form action="" method="post">
-        <h3> Назва ролі: </h3>
-        <input type="text" name="name">
-        
-        <h3> Додавання постів: </h3>
-        <input type="checkbox" name="adding_post_permission">
+    <form action="" method="post" class="space-y-6">
+        {% csrf_token %}
 
-        <h3> Коментування постів: </h3>
-        <input type="checkbox" name="comment_post_permission">
+        <!-- Назва ролі -->
+        <div>
+            <label for="name" class="block text-lg font-medium text-gray-700 mb-2">Назва ролі:</label>
+            <input type="text" name="name" id="name" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
 
-        <h3> Додавання фото: </h3>
-        <input type="checkbox" name="adding_image_permission">
+        <!-- Додавання постів -->
+        <div>
+            <label for="adding_post_permission" class="block text-lg font-medium text-gray-700 mb-2">Додавання постів:</label>
+            <input type="checkbox" name="adding_post_permission" id="adding_post_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Додавання відео: </h3>
-        <input type="checkbox" name="adding_video_permission">
+        <!-- Коментування постів -->
+        <div>
+            <label for="comment_post_permission" class="block text-lg font-medium text-gray-700 mb-2">Коментування постів:</label>
+            <input type="checkbox" name="comment_post_permission" id="comment_post_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Додавання голосувань: </h3>
-        <input type="checkbox" name="adding_vote_permission">
+        <!-- Додавання фото -->
+        <div>
+            <label for="adding_image_permission" class="block text-lg font-medium text-gray-700 mb-2">Додавання фото:</label>
+            <input type="checkbox" name="adding_image_permission" id="adding_image_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Можливість голосування: </h3>
-        <input type="checkbox" name="adding_answer_vote_permission">
+        <!-- Додавання відео -->
+        <div>
+            <label for="adding_video_permission" class="block text-lg font-medium text-gray-700 mb-2">Додавання відео:</label>
+            <input type="checkbox" name="adding_video_permission" id="adding_video_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Можливіть банити користувачів: </h3>
-        <input type="checkbox" name="user_ban_permission">
+        <!-- Додавання голосувань -->
+        <div>
+            <label for="adding_vote_permission" class="block text-lg font-medium text-gray-700 mb-2">Додавання голосувань:</label>
+            <input type="checkbox" name="adding_vote_permission" id="adding_vote_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Можливість заглушати користувачів: </h3>
-        <input type="checkbox" name="user_mute_permission">
+        <!-- Можливість голосування -->
+        <div>
+            <label for="adding_answer_vote_permission" class="block text-lg font-medium text-gray-700 mb-2">Можливість голосування:</label>
+            <input type="checkbox" name="adding_answer_vote_permission" id="adding_answer_vote_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Можливіть видаляти пости: </h3>
-        <input type="checkbox" name="delete_user_post_permission">
+        <!-- Можливість банити користувачів -->
+        <div>
+            <label for="user_ban_permission" class="block text-lg font-medium text-gray-700 mb-2">Можливість банити користувачів:</label>
+            <input type="checkbox" name="user_ban_permission" id="user_ban_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <h3> Права адміністратора: </h3>
-        <input type="checkbox" name="admin_permission">
+        <!-- Можливість заглушати користувачів -->
+        <div>
+            <label for="user_mute_permission" class="block text-lg font-medium text-gray-700 mb-2">Можливість заглушати користувачів:</label>
+            <input type="checkbox" name="user_mute_permission" id="user_mute_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
+        <!-- Можливість видаляти пости -->
+        <div>
+            <label for="delete_user_post_permission" class="block text-lg font-medium text-gray-700 mb-2">Можливість видаляти пости:</label>
+            <input type="checkbox" name="delete_user_post_permission" id="delete_user_post_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
 
-        <button type="submit"> Створити роль </button>
+        <!-- Права адміністратора -->
+        <div>
+            <label for="admin_permission" class="block text-lg font-medium text-gray-700 mb-2">Права адміністратора:</label>
+            <input type="checkbox" name="admin_permission" id="admin_permission" class="h-5 w-5 text-blue-600 focus:ring-blue-500">
+        </div>
+
+        <!-- Кнопка відправки -->
+        <div class="mt-6">
+            <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">
+                Створити роль
+            </button>
+        </div>
     </form>
-
+  </div>
 {% endblock %}
