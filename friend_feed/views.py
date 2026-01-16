@@ -13,6 +13,7 @@ from django.db.models import Count
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.db.models import Q
+from community.models import UserCommunity, CommunityMember
 
 
 class PostFeed(ListView):
@@ -102,8 +103,21 @@ class SearchCommunity(ListView):
         
         return queryset
     
+    def post(self, request, *args, **kwargs):
+        community_id = request.POST.get("community_id")
+        user = request.user
 
-class FriendRequest(View):
+        try:
+            community = UserCommunity.objects.get(id=community_id)
+        except UserCommunity.DoesNotExist:
+            return redirect("friend_feed:search_community")
+
+        if not CommunityMember.objects.filter(user=user, community=community).exists():
+            CommunityMember.objects.create(user=user, community=community)
+
+        return redirect("friend_feed:search_community")
+
+class FriendRequest(View):                                                                                                                  
     def post(self, request, friend):
         user = request.user
         friend = get_object_or_404(User, id=friend)

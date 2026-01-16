@@ -8,8 +8,9 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import ProfileEditForm
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from user_profile.models import UserFriend
+from user_profile.models import UserFriend, Chat, ChatMessage
 from community.models import UserCommunity, CommunityMember
+from django.http import JsonResponse
 
 class Profile(DetailView):
     model = User
@@ -123,3 +124,57 @@ class Communities(ListView):
     def get_queryset(self):
         user = self.request.user
         return UserCommunity.objects.filter(communitymember__user=user)
+
+
+class ChatDetailView(DetailView):
+    model = Chat
+    template_name = 'user_profile/chat_detail.html'
+    context_object_name = 'chat'
+
+    def get_queryset(self):
+        return Chat.objects.filter(user=self.request.user).select_related('receiver')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        chat = self.get_object()
+        context['messages'] = ChatMessage.objects.filter(chat=chat).order_by('create_time')
+        return context
+
+
+class ChatCreateView(View):
+    def post(self, request, *args, **kwargs):
+        receiver_id = request.POST.get('receiver_id')
+        receiver = get_object_or_404(User, id=receiver_id)
+
+        chat = Chat.objects.filter(user=request.user, receiver=receiver) | Chat.objects.filter(user=receiver, receiver=request.user)
+        
+        if chat.exists():
+            return JsonResponse({"message": "Chat already exists", "chat_id": chat.first().id})
+
+        chat = Chat.objects.create(user=request.user, receiver=receiver)
+        return JsonResponse({"message": "Chat created", "chat_id": chat.id})
+    
+
+class ChatMessageCreateView(View):
+    def post(self, request, *args, **kwargs):
+        chat_id = request.POST.get('chat_id')
+        text = request.POST.get('text')
+
+        chat = get_object_or_404(Chat, id=chat_id)
+
+        message = ChatMessage.objects.create(
+            chat=chat,
+            user=request.user,
+            text=text
+        )
+
+        return JsonResponse({
+            "message": "Message sent",
+            "message_id": message.id,
+            "text": message.text,
+            "create_time": message.create_time.strftime('%Y-%m-%d %H:%M:%S'),
+        })
+
+
+class AddRole(View):
+    pass

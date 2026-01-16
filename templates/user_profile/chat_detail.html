@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{{ chat.name }}</h2>
+
+  <div id="messages">
+    {% for message in messages %}
+      <div class="message">
+        <p><strong>{{ message.user.username }}:</strong> {{ message.text }}</p>
+        <small>{{ message.create_time }}</small>
+      </div>
+    {% endfor %}
+  </div>
+
+  <form id="messageForm">
+    <textarea name="text" id="text" rows="3" placeholder="Write your message..."></textarea>
+    <button type="submit">Send</button>
+  </form>
+
+  <script>
+    document.getElementById('messageForm').onsubmit = function(event) {
+      event.preventDefault();
+      const text = document.getElementById('text').value;
+      fetch("{% url 'chat_message_create' %}", {
+        method: 'POST',
+        body: new URLSearchParams({
+          'chat_id': '{{ chat.id }}',
+          'text': text
+        }),
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === "Message sent") {
+          const messageDiv = document.createElement('div');
+          messageDiv.classList.add('message');
+          messageDiv.innerHTML = `<p><strong>You:</strong> ${data.text}</p><small>${data.create_time}</small>`;
+          document.getElementById('messages').appendChild(messageDiv);
+          document.getElementById('text').value = ''; // Clear the textarea
+        }
+      });
+    }
+  </script>
+{% endblock %}

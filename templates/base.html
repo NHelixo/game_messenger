@@ -8,13 +8,10 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- Навігаційна панель -->
     <header class="bg-blue-600 p-4 shadow-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Логотип або назва -->
             <a href="{% url 'friend_feed:post_feed' %}" class="text-white text-2xl font-semibold hover:text-blue-200">Головна</a>
 
-            <!-- Навігація -->
             <nav class="space-x-6">
                 {% if user.is_authenticated %}
                     <a href="{% url 'user_profile:profile' pk=user.id %}" class="text-white hover:text-blue-200">Профіль</a>
@@ -29,7 +26,6 @@
         </div>
     </header>
 
-    <!-- Основний контент -->
     <main class="my-8">
         {% block content %}
         {% endblock %}

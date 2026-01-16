@@ -8,6 +8,7 @@ app_name = 'community'
 urlpatterns = [
     path('<int:id>/', views.Community.as_view(), name='community'),
     path('add_role/<int:id>/', views.AddRole.as_view(), name='add_role'),
+
 ]
 
 if settings.DEBUG:

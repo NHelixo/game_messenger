@@ -30,7 +30,7 @@ class CommunityRole(models.Model):
 class CommunityMember(models.Model):
     community = models.ForeignKey(UserCommunity, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    role = models.ForeignKey(CommunityRole, on_delete=models.CASCADE)
+    role = models.ForeignKey(CommunityRole, on_delete=models.CASCADE, null=True, blank=True)
     joining_time = models.DateTimeField(auto_now=True)
 
 

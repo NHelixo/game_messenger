@@ -20,14 +20,33 @@ class UserFriend(models.Model):
         ).first()
 
 
+class Chat(models.Model):
+    user = models.ForeignKey(User, related_name='c_user', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='c_receiver', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.receiver.username if self.user == self.receiver else f"{self.user.username} & {self.receiver.username}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        unique_together = ('user', 'receiver')
+
 class ChatMessage(models.Model):
+    chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='r_user', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='r_friend', on_delete=models.CASCADE)
     text = models.TextField()
     receiver_like = models.BooleanField(default=False)
     create_time = models.DateTimeField(auto_now=True)
     is_read = models.BooleanField(default=False)
     edited = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Message from {self.user.username} to {self.chat.name}"
 
 
 class UserPicture(models.Model):

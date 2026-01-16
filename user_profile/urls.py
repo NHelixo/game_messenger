@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import Profile, ProfileEdit
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -13,6 +12,9 @@ urlpatterns = [
     path('comfirm_friend/<int:pk>/', views.AcceptFriend.as_view(), name='comfirm_friend'),
     path('reject_friend/<int:pk>/', views.RejectFriend.as_view(), name='reject_friend'),
     path('communities/', views.Communities.as_view(), name='communities'),
+    path('chat/<int:pk>/', views.ChatDetailView.as_view(), name='chat_detail'),
+    path('chat/create/', views.ChatCreateView.as_view(), name='chat_create'),
+    path('chat/message/create/', views.ChatMessageCreateView.as_view(), name='chat_message_create'),
 ]
 
 if settings.DEBUG:

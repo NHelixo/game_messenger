@@ -22,6 +22,7 @@ class Community(DetailView):
 
         return get_object_or_404(UserCommunity, id=community_id)
 
+
 class AddRole(View):
     model = CommunityRole
     template_name = "community/add_role.html"
